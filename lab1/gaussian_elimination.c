@@ -1,8 +1,17 @@
+#define _DEFAULT_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <sys/time.h>
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 #define num double
 
@@ -11,12 +20,13 @@
 #define false 0
 num eps;
 num precision = 17.0;
+
 void calc_eps() {
-    eps = 1 / (num)pow(10, precision);
+    eps = 1 / (num) pow(10, precision);
 }
 
 num getTrunked(num what, num places) {
-    return (num)(floor((what * pow(10, places) + 0.5)) / pow(10, places));
+    return (num) (floor((what * pow(10, places) + 0.5)) / pow(10, places));
 }
 
 
@@ -58,7 +68,7 @@ void show_relative_error(num *result, num *exact_result, int size) {
     num mean = 0.0;
 
     for (int i = 0; i < size; i++) {
-        mean += fabs(result[i]-exact_result[i]);
+        mean += fabs(result[i] - exact_result[i]);
     }
     mean /= (num) size;
     printf("Mean relative error of the result is : \n\t%.16lf\n", mean);
@@ -242,94 +252,103 @@ int main(int argc, char **argv) {
         exit(1);
     }
     calc_eps();
-    for(int size =100 ;size<10000;size+=100) {
-        int i, j,  precision = 8.0;
-
-        //printf("What size of the matrix?\n");
-        //  scanf("%d", &size);
-
-
-        num **A, **AB;
-        num *B;
-        num *X, *Xprim;
-        Xprim = malloc(size * sizeof(num));
-        /*
-        //Uncomment segment for zad 1 contents
-        printf("Zad1 A:\n");
-        A = zad1_generate_a(size);
-        //truncate_2d(A, precision, size);
-        print_2d_matrix(A, size);
-
-        printf("Zad1 X:\n");
-        X = zad1_get_x(size);
-        //truncate_1d(X, precision, size);
-        print_1d_matrix(X, size);
-
-        printf("Zad1 B:\n");
-        B = zad1_calculate_b(A, X, size);
-        print_1d_matrix(B, size);
-        */
-
-        //Uncomment for zadanie 2
-        printf("-------MATRIX SIZE %d ------------\n" ,size);
-        //printf("Zad2 A:\n");
-        A = zad2_generate_a(size);
-        truncate_2d(A, precision, size);
-        //print_2d_matrix(A, size);
-
-        //printf("Zad2 X:\n");
-        X = zad1_get_x(size);
-        truncate_1d(X, precision, size);
-        // print_1d_matrix(X,size);
-
-        //printf("Zad2 B:\n");
-        B = zad1_calculate_b(A, X, size);
-        // print_1d_matrix(B, size);
-
-        num m = 4.0;
-        num k = 5.0;
-
-        /*
-        //Uncomment for zadanie 3
-        printf("Zad3 A:\n");
-        A = zad3_generate(size, m, k);
-        truncate_2d(A, precision, size);
-        print_2d_matrix(A, size);
-
-        printf("Zad3 X:\n");
-        X = zad1_get_x(size);
-        truncate_1d(X, precision, size);
-        print_1d_matrix(X, size);
-
-        printf("Zad3 B:\n");
-        B = zad1_calculate_b(A,X,size);
-        print_1d_matrix(B, size);
-        */
-
-        AB = concat_AB_arrays(A, B, size);
-        num **ABprim = concat_AB_arrays(A, B, size);
-        num *Xbis = malloc(size * sizeof(num));
-        //Xbis = zad3_solve_thomas(ABprim, size);
-        // printf("Zad3 X' solved by Thomas's algorithm\nTime taken: %lf\n",
-        //       thomas_time = (double) (end - start) / (CLOCKS_PER_SEC));
-        //print_1d_matrix(B, size);
-        if (gaussian_elimination_1(size, AB, Xprim) == false) {
-            printf("Unsolvable matrixes given\n");
-            exit(1);
-        }
-        //print_1d_matrix(Xprim, size);
+    //   for (int size = 100; size < 10000; size += 100) {
+    int i, j, precision = 17.0;
+    int size;
+    printf("What size of the matrix?\n");
+    scanf("%d", &size);
 
 
-        //printf("Gaussian differences:\n\n");
-        show_euclides_distance(X, Xprim, size);
-        show_max_distance(X, Xprim, size);
-        show_relative_error(X, Xprim, size);
-        /* printf("\nTridiagonal differences: \n\n");
-         show_euclides_distance(X, Xbis, size);
-         show_max_distance(X, Xbis, size);
-         printf("\nTime of tridiagonal: %lf\n Time of gaussian: %lf\nDifference: %lf\n",tridiagonal_time,gaussian_time,tridiagonal_time-gaussian_time);
-         */
+    num **A, **AB;
+    num *B;
+    num *X, *Xprim;
+    Xprim = malloc(size * sizeof(num));
+    /*
+    //Uncomment segment for zad 1 contents
+    printf("Zad1 A:\n");
+    A = zad1_generate_a(size);
+    //truncate_2d(A, precision, size);
+    print_2d_matrix(A, size);
+
+    printf("Zad1 X:\n");
+    X = zad1_get_x(size);
+    //truncate_1d(X, precision, size);
+    print_1d_matrix(X, size);
+
+    printf("Zad1 B:\n");
+    B = zad1_calculate_b(A, X, size);
+    print_1d_matrix(B, size);
+    */
+    /*
+    //Uncomment for zadanie 2
+    printf("-------MATRIX SIZE %d ------------\n" ,size);
+    //printf("Zad2 A:\n");
+    A = zad2_generate_a(size);
+    truncate_2d(A, precision, size);
+    //print_2d_matrix(A, size);
+
+    //printf("Zad2 X:\n");
+    X = zad1_get_x(size);
+    truncate_1d(X, precision, size);
+    // print_1d_matrix(X,size);
+
+    //printf("Zad2 B:\n");
+    B = zad1_calculate_b(A, X, size);
+    // print_1d_matrix(B, size);
+    */
+    num m = 4.0;
+    num k = 5.0;
+
+    struct timeval *realtime = malloc(4 * sizeof(struct timeval));
+    //realtime[0-1] = thomas's
+    //realtime[2-3] = gaussian algorithm
+
+    //Uncomment for zadanie 3
+    printf("Zad3 A:\n");
+    A = zad3_generate(size, m, k);
+    truncate_2d(A, precision, size);
+    //print_2d_matrix(A, size);
+
+    printf("Zad3 X:\n");
+    X = zad1_get_x(size);
+    truncate_1d(X, precision, size);
+    //  print_1d_matrix(X, size);
+
+    printf("Zad3 B:\n");
+    B = zad1_calculate_b(A, X, size);
+    // print_1d_matrix(B, size);
+
+
+    AB = concat_AB_arrays(A, B, size);
+    num **ABprim = concat_AB_arrays(A, B, size);
+    num *Xbis;
+    gettimeofday(&realtime[0], NULL);
+    Xbis = zad3_solve_thomas(ABprim, size);
+    gettimeofday(&realtime[1], NULL);
+    gettimeofday(&realtime[2], NULL);
+    if (gaussian_elimination_1(size, AB, Xprim) == false) {
+        printf("Unsolvable matrixes given\n");
+        exit(1);
     }
+    gettimeofday(&realtime[3], NULL);
+
+    printf("Gaussian differences:\n\n");
+    show_euclides_distance(X, Xprim, size);
+    show_max_distance(X, Xprim, size);
+    show_relative_error(X, Xprim, size);
+
+    printf("\nThomas algorithm differences: \n\n");
+    show_euclides_distance(X, Xbis, size);
+    show_max_distance(X, Xbis, size);
+    show_relative_error(X, Xbis, size);
+
+    struct timeval *thomas_time;
+    timersub(realtime[1], realtime[0], thomas_time);
+    struct timeval *gaussian_time;
+    timersub(realtime[3], realtime[2], gaussian_time);
+
+    printf("Time of thomas's algorithm: %ld.%06ld\n", thomas_time->tv_sec,thomas_time->tv_usec);
+    printf("Time of gaussian algorithm: %ld.%06ld\n", gaussian_time->tv_sec,gaussian_time->tv_usec);
 
 
     return 0;
