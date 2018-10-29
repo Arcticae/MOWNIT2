@@ -6,16 +6,17 @@
 
 #define num double
 
+
 #define true 1
 #define false 0
 num eps;
-
+num precision = 17.0;
 void calc_eps() {
-    eps = 1 / pow(10, 1655);
+    eps = 1 / (num)pow(10, precision);
 }
 
 num getTrunked(num what, num places) {
-    return (floor((what * pow(10, places) + 0.5)) / pow(10, places));
+    return (num)(floor((what * pow(10, places) + 0.5)) / pow(10, places));
 }
 
 
@@ -45,11 +46,22 @@ int gaussian_elimination_1(int n, num **AB, num *X) {
 }
 
 void show_euclides_distance(num *result, num *exact_result, int size) {
-    printf("Euclides distance from the right result is : \n");
+    num sum_of_squares = 0.0;
     for (int i = 0; i < size; i++) {
-        printf("%.16lf ", fabs(result[i] - exact_result[i]));
+        sum_of_squares += pow(fabs(result[i] - exact_result[i]), 2.0);
     }
+    printf("Euclides distance from the right result is : \n\t%.16lf\n", sqrt(sum_of_squares));
     printf("\n");
+}
+
+void show_relative_error(num *result, num *exact_result, int size) {
+    num mean = 0.0;
+
+    for (int i = 0; i < size; i++) {
+        mean += fabs(result[i]-exact_result[i]);
+    }
+    mean /= (num) size;
+    printf("Mean relative error of the result is : \n\t%.16lf\n", mean);
 }
 
 void show_max_distance(num *result, num *exact_result, int size) {
@@ -77,41 +89,41 @@ num *zad1_calculate_b(num **A, num *X, int n) {
     return B;
 }
 
-num* zad3_solve_tridiagonal(num **AB, int size) {
-    num *l = malloc(size*sizeof(num));
-    num *u = malloc(size*sizeof(num));
-    num *a = malloc(size*sizeof(num));
-    num *c = malloc(size*sizeof(num));
+num *zad3_solve_thomas(num **AB, int size) {
+    num *l = malloc(size * sizeof(num));
+    num *u = malloc(size * sizeof(num));
+    num *a = malloc(size * sizeof(num));
+    num *c = malloc(size * sizeof(num));
 
-    num *x = malloc(size*sizeof(num));
-    num *y = malloc(size*sizeof(num));
+    num *x = malloc(size * sizeof(num));
+    num *y = malloc(size * sizeof(num));
 
     u[0] = AB[0][0];
     c[0] = AB[0][1];
-    for(int i=1; i<size-1;i++){
-        a[i] = AB[i][i-1];
-        c[i] = AB[i][i+1];
+    for (int i = 1; i < size - 1; i++) {
+        a[i] = AB[i][i - 1];
+        c[i] = AB[i][i + 1];
 
-        l[i] = (a[i] / u[i-1]);
-        u[i] = AB[i][i] - (l[i] * c[i-1]);
+        l[i] = (a[i] / u[i - 1]);
+        u[i] = AB[i][i] - (l[i] * c[i - 1]);
     }
-    a[size-1] = AB[size-1][size-2];
-    l[size-1] =(a[size-1] / u[size-2]);
-    u[size-1] = AB[size-1][size-1] - (l[size-1] * c[size-2]);
+    a[size - 1] = AB[size - 1][size - 2];
+    l[size - 1] = (a[size - 1] / u[size - 2]);
+    u[size - 1] = AB[size - 1][size - 1] - (l[size - 1] * c[size - 2]);
 
 
     // L * y = b
     // U * x = y
 
     y[0] = AB[0][size];
-    for(int i=1; i<size; i++){
-        y[i] = (AB[i][size] - (l[i] * y[i-1]));
+    for (int i = 1; i < size; i++) {
+        y[i] = (AB[i][size] - (l[i] * y[i - 1]));
     }
 
 
-    x[size-1] = (y[size-1] / u[size-1]);
-    for(int i=size-2; i>=0 ; i--){
-        x[i] =((y[i] - (c[i] * x[i+1])) / u[i]);
+    x[size - 1] = (y[size - 1] / u[size - 1]);
+    for (int i = size - 2; i >= 0; i--) {
+        x[i] = ((y[i] - (c[i] * x[i + 1])) / u[i]);
     }
 
 
@@ -229,98 +241,96 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Not enough arguments supplied to program, give me the size of matrix.\n");
         exit(1);
     }
-    int i, j, size, precision;
+    calc_eps();
+    for(int size =100 ;size<10000;size+=100) {
+        int i, j,  precision = 8.0;
 
-    printf("Give dimension\n");
-    scanf("%d", &size);
-    printf("How exacts the results have to be?\n");
-    scanf("%d", &precision);
-    calc_eps(precision);
-
-    num **A, **AB;
-    num *B;
-    num *X, *Xprim;
-    Xprim = malloc(size * sizeof(num));
-    /* //Uncomment segment for zad 1 contents
-   printf("Zad1 A:\n");
-   A = zad1_generate_a(size);
-   truncate_2d(A, precision, size);
-   print_2d_matrix(A, size);
-
-   printf("Zad1 X:\n");
-   X = zad1_get_x(size);
-   truncate_1d(X, precision, size);
-   print_1d_matrix(X, size);
-
-   printf("Zad1 B:\n");
-   B = zad1_calculate_b(A, X, size);
-   print_1d_matrix(B, size);
-     */
-
-    /*//Uncomment for zadanie 2
-   printf("Zad2 A:\n");
-   A = zad2_generate_a(size);
-   truncate_2d(A, precision, size);
-   print_2d_matrix(A, size);
-
-   printf("Zad2 X:\n");
-   X = zad1_get_x(size);
-   truncate_1d(X, precision, size);
-   print_1d_matrix(X,size);
-
-   printf("Zad2 B:\n");
-   B = zad1_calculate_b(A, X, size);
-   print_1d_matrix(B, size);
-   */
-    num m = 4.0;
-    num k = 5.0;
-    //Uncomment for zadanie 3
-    printf("Zad3 A:\n");
-    A = zad3_generate(size, m, k);
-    truncate_2d(A, precision, size);
-    print_2d_matrix(A, size);
-
-    printf("Zad3 X:\n");
-    X = zad1_get_x(size);
-    truncate_1d(X, precision, size);
-    print_1d_matrix(X, size);
-
-    printf("Zad3 B:\n");
-    B = zad1_calculate_b(A,X,size);
-    print_1d_matrix(B, size);
+        //printf("What size of the matrix?\n");
+        //  scanf("%d", &size);
 
 
-    AB = concat_AB_arrays(A, B, size);
-    num** ABprim = concat_AB_arrays(A,B,size);
-    clock_t start,end;
-    double tridiagonal_time,gaussian_time;
-    start = clock();
-    num*Xbis=malloc(size*sizeof(num));
-    Xbis=zad3_solve_tridiagonal(ABprim,size);
-    end = clock();
-    printf("Zad3 X' solved by tridiagonal algorithm\nTime taken: %lf\n",tridiagonal_time=(double)(end-start)/(CLOCKS_PER_SEC));
-    print_1d_matrix(B,size);
-    start = clock();
-    if (gaussian_elimination_1(size, AB, Xprim) == false) {
-        printf("Unsolvable matrixes given\n");
-        exit(1);
-    }
-    end= clock();
-    printf("Zad3  X' (calculated by elimination) \n Time taken: %lf\n",gaussian_time=(double)(end-start)/(CLOCKS_PER_SEC));
-    print_1d_matrix(Xprim, size);
+        num **A, **AB;
+        num *B;
+        num *X, *Xprim;
+        Xprim = malloc(size * sizeof(num));
+        /*
+        //Uncomment segment for zad 1 contents
+        printf("Zad1 A:\n");
+        A = zad1_generate_a(size);
+        //truncate_2d(A, precision, size);
+        print_2d_matrix(A, size);
 
-    printf("Do you want to compare the results? \n Y/N");
-    char choice;
-    scanf(" %c", &choice);
-    if (choice == 'Y' || choice == 'y') {
-        printf("Gaussian differences:\n\n");
+        printf("Zad1 X:\n");
+        X = zad1_get_x(size);
+        //truncate_1d(X, precision, size);
+        print_1d_matrix(X, size);
+
+        printf("Zad1 B:\n");
+        B = zad1_calculate_b(A, X, size);
+        print_1d_matrix(B, size);
+        */
+
+        //Uncomment for zadanie 2
+        printf("-------MATRIX SIZE %d ------------\n" ,size);
+        //printf("Zad2 A:\n");
+        A = zad2_generate_a(size);
+        truncate_2d(A, precision, size);
+        //print_2d_matrix(A, size);
+
+        //printf("Zad2 X:\n");
+        X = zad1_get_x(size);
+        truncate_1d(X, precision, size);
+        // print_1d_matrix(X,size);
+
+        //printf("Zad2 B:\n");
+        B = zad1_calculate_b(A, X, size);
+        // print_1d_matrix(B, size);
+
+        num m = 4.0;
+        num k = 5.0;
+
+        /*
+        //Uncomment for zadanie 3
+        printf("Zad3 A:\n");
+        A = zad3_generate(size, m, k);
+        truncate_2d(A, precision, size);
+        print_2d_matrix(A, size);
+
+        printf("Zad3 X:\n");
+        X = zad1_get_x(size);
+        truncate_1d(X, precision, size);
+        print_1d_matrix(X, size);
+
+        printf("Zad3 B:\n");
+        B = zad1_calculate_b(A,X,size);
+        print_1d_matrix(B, size);
+        */
+
+        AB = concat_AB_arrays(A, B, size);
+        num **ABprim = concat_AB_arrays(A, B, size);
+        num *Xbis = malloc(size * sizeof(num));
+        //Xbis = zad3_solve_thomas(ABprim, size);
+        // printf("Zad3 X' solved by Thomas's algorithm\nTime taken: %lf\n",
+        //       thomas_time = (double) (end - start) / (CLOCKS_PER_SEC));
+        //print_1d_matrix(B, size);
+        if (gaussian_elimination_1(size, AB, Xprim) == false) {
+            printf("Unsolvable matrixes given\n");
+            exit(1);
+        }
+        //print_1d_matrix(Xprim, size);
+
+
+        //printf("Gaussian differences:\n\n");
         show_euclides_distance(X, Xprim, size);
         show_max_distance(X, Xprim, size);
-        printf("\nTridiagonal differences: \n\n");
-        show_euclides_distance(X, Xbis, size);
-        show_max_distance(X, Xbis, size);
-        printf("\nTime of tridiagonal: %lf\n Time of gaussian: %lf\nDifference: %lf\n",tridiagonal_time,gaussian_time,tridiagonal_time-gaussian_time);
+        show_relative_error(X, Xprim, size);
+        /* printf("\nTridiagonal differences: \n\n");
+         show_euclides_distance(X, Xbis, size);
+         show_max_distance(X, Xbis, size);
+         printf("\nTime of tridiagonal: %lf\n Time of gaussian: %lf\nDifference: %lf\n",tridiagonal_time,gaussian_time,tridiagonal_time-gaussian_time);
+         */
     }
+
 
     return 0;
 
