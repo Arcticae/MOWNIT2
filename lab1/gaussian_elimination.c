@@ -12,7 +12,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <unistd.h>
-
+#include <sys/resource.h>
 #define num double
 
 
@@ -44,12 +44,12 @@ int gaussian_elimination_1(int n, num **AB, num *X) {
         }
     }
 
-
     for (i = n - 1; i >= 0; i--) {
         s = AB[i][n];
         for (j = n - 1; j >= i + 1; j--)
             s -= AB[i][j] * X[j];
         if (fabs(AB[i][i]) < eps) return false;
+
         X[i] = s / AB[i][i];
     }
     return true;
@@ -245,24 +245,21 @@ void print_1d_matrix(num *X, int n) {
     printf("\n\n");
 }
 
+
 int main(int argc, char **argv) {
     srand((unsigned int) time(NULL));
-    if (argc < 2) {
-        fprintf(stderr, "Not enough arguments supplied to program, give me the size of matrix.\n");
-        exit(1);
-    }
+
     calc_eps();
     //   for (int size = 100; size < 10000; size += 100) {
     int i, j, precision = 17.0;
     int size;
     printf("What size of the matrix?\n");
     scanf("%d", &size);
-
-
     num **A, **AB;
     num *B;
     num *X, *Xprim;
     Xprim = malloc(size * sizeof(num));
+
     /*
     //Uncomment segment for zad 1 contents
     printf("Zad1 A:\n");
@@ -304,17 +301,14 @@ int main(int argc, char **argv) {
     //realtime[2-3] = gaussian algorithm
 
     //Uncomment for zadanie 3
-    printf("Zad3 A:\n");
     A = zad3_generate(size, m, k);
     truncate_2d(A, precision, size);
     //print_2d_matrix(A, size);
 
-    printf("Zad3 X:\n");
     X = zad1_get_x(size);
     truncate_1d(X, precision, size);
     //  print_1d_matrix(X, size);
 
-    printf("Zad3 B:\n");
     B = zad1_calculate_b(A, X, size);
     // print_1d_matrix(B, size);
 
@@ -322,6 +316,8 @@ int main(int argc, char **argv) {
     AB = concat_AB_arrays(A, B, size);
     num **ABprim = concat_AB_arrays(A, B, size);
     num *Xbis;
+
+
     gettimeofday(&realtime[0], NULL);
     Xbis = zad3_solve_thomas(ABprim, size);
     gettimeofday(&realtime[1], NULL);
@@ -342,13 +338,14 @@ int main(int argc, char **argv) {
     show_max_distance(X, Xbis, size);
     show_relative_error(X, Xbis, size);
 
-    struct timeval *thomas_time;
-    timersub(realtime[1], realtime[0], thomas_time);
-    struct timeval *gaussian_time;
-    timersub(realtime[3], realtime[2], gaussian_time);
 
-    printf("Time of thomas's algorithm: %ld.%06ld\n", thomas_time->tv_sec,thomas_time->tv_usec);
-    printf("Time of gaussian algorithm: %ld.%06ld\n", gaussian_time->tv_sec,gaussian_time->tv_usec);
+    struct timeval *thomas_time = malloc(sizeof(struct timeval));
+    timersub(&realtime[1], &realtime[0], thomas_time);
+    struct timeval *gaussian_time = malloc(sizeof(struct timeval));
+    timersub(&realtime[3], &realtime[2], gaussian_time);
+
+    printf("Time of thomas's algorithm: %ld.%06ld\n", thomas_time->tv_sec, thomas_time->tv_usec);
+    printf("Time of gaussian algorithm: %ld.%06ld\n", gaussian_time->tv_sec, gaussian_time->tv_usec);
 
 
     return 0;

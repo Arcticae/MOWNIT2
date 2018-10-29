@@ -57,14 +57,13 @@ mat zad3_generate(int n) {
 
 int main(){
     int a;
-    std::cin >> a;
 
-
+    for(a=100;a<6000;a+=300){
     mat matrix = zad1_generate_a(a);
     mat matrix2 = zad2_generate_a(a);
     mat matrix3 = zad3_generate(a);
-
-    cout << "Zad1 cond" << cond(matrix)<<endl;
-    cout << "Zad2 cond" << cond(matrix2)<<endl;
-    cout << "Zad3 cond" << cond(matrix3)<<endl;
-}
+    //cout << "Zad1 cond for size "<< a<< ": " << cond(matrix)<<endl;
+    //cout << "Zad2 cond for size "<< a<< ": " <<cond(matrix2)<<endl;
+    cout << "Zad3 cond for size "<< a<< ": " << cond(matrix3)<<endl;
+    }
+    }
