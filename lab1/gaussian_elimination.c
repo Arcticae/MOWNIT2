@@ -25,9 +25,6 @@ void calc_eps() {
     eps = 1 / (num) pow(10, precision);
 }
 
-num getTrunked(num what, num places) {
-    return (num) (floor((what * pow(10, places) + 0.5)) / pow(10, places));
-}
 
 
 int gaussian_elimination_1(int n, num **AB, num *X) {
@@ -199,18 +196,6 @@ num *zad1_get_x(int n) {
     return X;
 }
 
-void truncate_2d(num **A, int places, int size) {
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            A[i][j] = getTrunked(A[i][j], places);
-        }
-    }
-}
-
-void truncate_1d(num *A, int places, int size) {
-    for (int i = 0; i < size; i++)
-        A[i] = getTrunked(A[i], places);
-}
 
 num **concat_AB_arrays(num **A, num *B, int size) {
     int i, j;
@@ -229,21 +214,6 @@ num **concat_AB_arrays(num **A, num *B, int size) {
     return AB;
 }
 
-void print_2d_matrix(num **A, int n) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            printf("%.5lf  ", A[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
-void print_1d_matrix(num *X, int n) {
-    for (int i = 0; i < n; i++)
-        printf("%.16lf  ", X[i]);
-    printf("\n\n");
-}
 
 
 int main(int argc, char **argv) {
@@ -302,11 +272,9 @@ int main(int argc, char **argv) {
 
     //Uncomment for zadanie 3
     A = zad3_generate(size, m, k);
-    truncate_2d(A, precision, size);
     //print_2d_matrix(A, size);
 
     X = zad1_get_x(size);
-    truncate_1d(X, precision, size);
     //  print_1d_matrix(X, size);
 
     B = zad1_calculate_b(A, X, size);
