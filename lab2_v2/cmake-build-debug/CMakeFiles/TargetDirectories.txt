@@ -1,0 +1,4 @@
+/home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab2/cmake-build-debug/CMakeFiles/zad2.dir
+/home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab2/cmake-build-debug/CMakeFiles/zad1.dir

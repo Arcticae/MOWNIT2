@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/zad1.dir/jacobi_zad1_var1.cpp.o  -o zad1 -larmadillo 

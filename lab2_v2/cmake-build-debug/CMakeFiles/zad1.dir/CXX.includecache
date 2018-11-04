@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab2/jacobi_zad1_var1.cpp
+iostream
+-
+cmath
+-
+zconf.h
+-
+cfloat
+-
+

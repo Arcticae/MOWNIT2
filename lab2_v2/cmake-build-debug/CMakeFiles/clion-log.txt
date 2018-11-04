@@ -1,0 +1,4 @@
+/home/timelock/Pulpit/clion-2017.3.4/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab2"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab2/cmake-build-debug
