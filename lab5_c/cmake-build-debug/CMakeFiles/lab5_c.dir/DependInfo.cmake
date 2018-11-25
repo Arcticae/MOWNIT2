@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab5_c/main.cpp" "/home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab5_c/cmake-build-debug/CMakeFiles/lab5_c.dir/main.cpp.o"
+  "C:/Users/Timelock/Desktop/Studia Vol5/MOWNIT2/lab5_c/main.cpp" "C:/Users/Timelock/Desktop/Studia Vol5/MOWNIT2/lab5_c/cmake-build-debug/CMakeFiles/lab5_c.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

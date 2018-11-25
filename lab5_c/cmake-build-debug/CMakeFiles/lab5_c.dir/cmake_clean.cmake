@@ -1,7 +1,9 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/lab5_c.dir/main.cpp.o"
+  "CMakeFiles/lab5_c.dir/main.cpp.obj"
   "lab5_c.pdb"
-  "lab5_c"
+  "lab5_c.exe"
+  "lab5_c.exe.manifest"
+  "liblab5_c.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
