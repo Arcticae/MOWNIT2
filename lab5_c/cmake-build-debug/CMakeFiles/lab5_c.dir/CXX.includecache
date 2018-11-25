@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/timelock/Dokumenty/Semestr 5/MOWNIT2/lab5_c/main.cpp
+iostream
+-
+cmath
+-
+fstream
+-
+
