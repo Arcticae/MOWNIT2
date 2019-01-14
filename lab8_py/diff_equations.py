@@ -39,6 +39,12 @@ def plot_differential(computed_x, computed_y):
     plt.close()
 
 
+def save_diffs(data, filename):
+    file = open(filename, "w")
+    for entry in data:
+        file.write(str(entry[0]) + ';' + str(entry[1]) + '\n')
+
+
 def MRS_eval():
     x0 = 0
     xk = ((2 * np.pi + 4) / 2)
@@ -50,24 +56,40 @@ def MRS_eval():
         diffs.append((n, max(abs(diff_eq[1] - yk))))
         plot_differential(diff_eq[0], diff_eq[1])
 
-    MRS_diffs = open("./MRS_DIFS.csv", "w")
-    for entry in diffs:
-        MRS_diffs.write(str(entry[0]) + ';' + str(entry[1]) + '\n')
+    save_diffs(diffs, "./MRS_diffs.csv")
 
 
-def main():
+def eul_rk_eval():
     x0 = np.pi / 6
     xk = 3 * np.pi / 2
     y0 = real_fx(x0)
+    diffs_eul = []
+    diffs_rk4 = []
+    diffs_rk2 = []
 
-    for n in range(3,50):
+    for n in range(3, 50):
         eul_res = euler(x0, xk, n, y0, f_xy)
-        rk2_res = runge_kutty_2(x0, xk, n, y0, f_xy)
-        rk4_res = runge_kutty_4(x0, xk, n, y0, f_xy)
         plot_solution(eul_res[0], eul_res[1], eul_res[0], real_fx(eul_res[0]), "euler")
-        plot_solution(rk2_res[0], rk2_res[1], rk2_res[0], real_fx(rk2_res[0]), "rk2")
-        plot_solution(rk4_res[0], rk4_res[1], rk4_res[0], real_fx(rk4_res[0]), "rk4")
+        diffs_eul.append((n, max(abs(eul_res[1] - real_fx(eul_res[0])))))
 
+        rk2_res = runge_kutty_2(x0, xk, n, y0, f_xy)
+        plot_solution(rk2_res[0], rk2_res[1], rk2_res[0], real_fx(rk2_res[0]), "rk2")
+        diffs_rk2.append((n, max(abs(rk2_res[1] - real_fx(rk2_res[0])))))
+
+        rk4_res = runge_kutty_4(x0, xk, n, y0, f_xy)
+        plot_solution(rk4_res[0], rk4_res[1], rk4_res[0], real_fx(rk4_res[0]), "rk4")
+        diffs_rk4.append((n, max(abs(rk4_res[1] - real_fx(rk4_res[0])))))
+
+    save_diffs(diffs_rk2, './rk2_diffs.csv')
+    save_diffs(diffs_rk4, './rk4_diffs.csv')
+    save_diffs(diffs_eul, './eul_diffs.csv')
+
+
+def main():
+    MRS_eval()
+    eul_rk_eval()
+    # print(real_fx(np.pi/6))
+    # print(mrs_real_res((2*np.pi+2)/2))
 
 if __name__ == "__main__":
     main()
